@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>वाणी एक्सेस (VaaniAccess) - Dialect-Adaptive Public Scheme Voice Navigator</title>
+  <meta name="description" content="भारत के नागरिकों के लिए प्राकृतिक बोलचाल और स्थानीय बोलियों में सरकारी योजनाओं की खोज और 3-चरणीय मार्गदर्शन का वॉयस नेविगेटर।">
+  
+  <!-- Modern Google Fonts: Inter & Noto Sans Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- Top Accessibility & Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-logo-icon">
+          <span class="mic-glyph">🎙️</span>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">वाणी एक्सेस <span class="brand-en">VaaniAccess</span></h1>
+          <p class="brand-tagline">सरकारी योजना वॉयस नेविगेटर • Dialect-Adaptive Welfare Guide</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="browseSchemesBtn" class="btn btn-secondary btn-sm" title="सभी योजनाएं देखें">
+          <span class="btn-icon">📋</span> सभी योजनाएं (Browse)
+        </button>
+        <div class="status-indicator-pill" id="systemStatusPill">
+          <span class="status-dot"></span>
+          <span class="status-label" id="statusLabel">वॉयस तैयार है (Voice Ready)</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-layout">
+    <!-- Hero Banner Card -->
+    <section class="hero-section">
+      <div class="hero-banner-wrap">
+        <img src="/static/assets/vaaniaccess_banner.jpg" alt="VaaniAccess Banner" class="hero-banner-img" />
+        <div class="hero-overlay">
+          <span class="hero-pill">🇮🇳 जन-कल्याण योजना समाधान (Jan Kalyan)</span>
+          <h2 class="hero-headline">अपनी भाषा में बोलें, सही सरकारी योजना पाएं</h2>
+          <p class="hero-subtext">चाहे आप किसान हों, छात्र हों, महिला हों या बुजुर्ग — माइक दबाकर अपनी आवश्यकता बताएं।</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Voice First Interactive Command Center -->
+    <section class="voice-center" aria-label="वॉयस इनपुट केंद्र">
+      <!-- Microphone Interaction Box -->
+      <div class="mic-interaction-card">
+        <div class="mic-button-wrapper">
+          <button id="micButton" class="mic-main-btn" aria-label="माइक दबाकर बोलें" title="बोलने के लिए क्लिक करें">
+            <div class="mic-pulse-ring ring-1"></div>
+            <div class="mic-pulse-ring ring-2"></div>
+            <div class="mic-inner-icon">
+              <svg class="svg-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+            </div>
+          </button>
+        </div>
+
+        <div class="mic-caption-group">
+          <h3 id="micPromptText" class="mic-prompt">माइक दबाकर बोलें (Click to Speak)</h3>
+          <p class="mic-subhint">हिंदी, हिंग्लिश या अपनी स्थानीय बोली (Bhojpuri/Awadhi) में बोलें</p>
+        </div>
+
+        <!-- Audio Wave Visualizer (Active during speech / playback) -->
+        <div id="audioWaveContainer" class="audio-wave-container hidden">
+          <div class="wave-bar bar-1"></div>
+          <div class="wave-bar bar-2"></div>
+          <div class="wave-bar bar-3"></div>
+          <div class="wave-bar bar-4"></div>
+          <div class="wave-bar bar-5"></div>
+          <div class="wave-bar bar-6"></div>
+          <div class="wave-bar bar-7"></div>
+          <div class="wave-bar bar-8"></div>
+        </div>
+
+        <!-- Live Recognized Transcript Box -->
+        <div id="liveTranscriptBox" class="live-transcript-box hidden">
+          <span class="transcript-tag">आपने कहा:</span>
+          <p id="liveTranscriptText" class="transcript-content">...</p>
+        </div>
+      </div>
+
+      <!-- Quick Demo Suggestion Chips (User Story PRD Shortcuts) -->
+      <div class="quick-chips-section">
+        <div class="chips-label">
+          <span>⚡ तुरंत आज़माएं (One-Tap PRD Demo Queries):</span>
+        </div>
+        <div class="chips-grid">
+          <button class="demo-chip" data-query="Main kheti karta hoon">
+            <span class="chip-icon">🌾</span>
+            <span class="chip-title">"Main kheti karta hoon"</span>
+            <span class="chip-meta">किसान (Farmer)</span>
+          </button>
+
+          <button class="demo-chip" data-query="Main college student hoon">
+            <span class="chip-icon">🎓</span>
+            <span class="chip-title">"Main college student hoon"</span>
+            <span class="chip-meta">छात्र (Scholarship)</span>
+          </button>
+
+          <button class="demo-chip" data-query="Meri umar 65 saal hai">
+            <span class="chip-icon">👵</span>
+            <span class="chip-title">"Meri umar 65 saal hai"</span>
+            <span class="chip-meta">बुजुर्ग (Pension)</span>
+          </button>
+
+          <button class="demo-chip" data-query="Main mahila hoon mujhe madad chahiye">
+            <span class="chip-icon">👩</span>
+            <span class="chip-title">"Mahila hoon madad chahiye"</span>
+            <span class="chip-meta">महिला कल्याण</span>
+          </button>
+
+          <button class="demo-chip" data-query="Ayushman Bharat card ilaj">
+            <span class="chip-icon">🏥</span>
+            <span class="chip-title">"Ayushman card ilaj"</span>
+            <span class="chip-meta">मुफ्त इलाज</span>
+          </button>
+
+          <button class="demo-chip" data-query="Hum kheti karat baani">
+            <span class="chip-icon">🗣️</span>
+            <span class="chip-title">"Hum kheti karat baani"</span>
+            <span class="chip-meta">भोजपुरी बोली</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Fallback Search Box (FR-5 & FR-7) -->
+      <div class="text-fallback-wrapper">
+        <form id="textQueryForm" class="fallback-form">
+          <div class="input-container">
+            <span class="input-icon">✍️</span>
+            <input 
+              type="text" 
+              id="textQueryInput" 
+              class="fallback-input" 
+              placeholder="या यहाँ लिखकर पूछें (उदा. 'कॉलेज छात्रवृत्ति', 'पीएम किसान', 'पेंशन')..." 
+              autocomplete="off"
+            />
+            <button type="submit" id="textSubmitBtn" class="btn btn-primary submit-btn">
+              <span>खोजें (Search)</span>
+              <span class="arrow-glyph">→</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Results Section (Scheme Guidance Card) -->
+    <section id="resultsSection" class="results-section hidden" aria-live="polite">
+      <div class="results-header">
+        <div class="result-badge-group">
+          <span id="detectedCategoryBadge" class="badge badge-category">किसान कल्याण</span>
+          <span id="dialectBadge" class="badge badge-dialect">Conversational Hinglish</span>
+          <span id="confidenceBadge" class="badge badge-confidence">96% Match</span>
+        </div>
+
+        <!-- Voice Assistant Control Bar -->
+        <div class="voice-controls-bar">
+          <button id="replayVoiceBtn" class="voice-btn voice-btn-play" title="आवाज में फिर से सुनें">
+            <span class="voice-icon">🔊</span>
+            <span id="voicePlayText">फिर से सुनें (Listen Audio)</span>
+          </button>
+          <button id="stopVoiceBtn" class="voice-btn voice-btn-stop" title="आवाज रोकें">
+            <span class="voice-icon">⏹️</span>
+            <span>रोकें</span>
+          </button>
+          <div class="speed-toggle-group">
+            <span class="speed-label">गति:</span>
+            <button id="speedNormalBtn" class="speed-btn active" data-rate="0.95">सामान्य</button>
+            <button id="speedSlowBtn" class="speed-btn" data-rate="0.8">धीमी (Slow)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spoken Guidance Alert Box -->
+      <div class="spoken-guidance-box">
+        <div class="speaker-avatar">
+          <span class="avatar-icon">📢</span>
+        </div>
+        <div class="spoken-text-wrap">
+          <span class="spoken-lead">वाणी सहायक का उत्तर (Voice Guidance):</span>
+          <p id="spokenGuideText" class="spoken-content">...</p>
+        </div>
+      </div>
+
+      <!-- Main Scheme Card -->
+      <div class="scheme-detail-card" id="schemeDetailCard">
+        <div class="card-hero-row">
+          <div class="scheme-title-col">
+            <h2 id="schemeNameHi" class="scheme-name-hi">प्रधानमंत्री किसान सम्मान निधि</h2>
+            <h3 id="schemeNameEn" class="scheme-name-en">PM-Kisan Samman Nidhi</h3>
+            <p id="schemeTagline" class="scheme-tagline">₹6,000 प्रति वर्ष की प्रत्यक्ष आर्थिक सहायता</p>
+          </div>
+          <div class="scheme-benefit-badge">
+            <span class="benefit-label">योजना लाभ (Benefit)</span>
+            <span id="schemeBenefitAmount" class="benefit-amount">₹6,000 / वर्ष</span>
+          </div>
+        </div>
+
+        <p id="schemeDesc" class="scheme-desc-text">विवरण...</p>
+
+        <!-- 3-Step Action Guide Pathway (PRD Core Requirement) -->
+        <div class="pathway-container">
+          <div class="pathway-header">
+            <h3 class="pathway-title">
+              <span class="title-icon">🚀</span> 3 आसान कदम — आवेदन प्रक्रिया (3-Step Action Pathway)
+            </h3>
+            <span class="pathway-badge">कदम-दर-कदम मार्गदर्शन</span>
+          </div>
+
+          <div class="steps-grid" id="stepsGrid">
+            <!-- Step 1 -->
+            <div class="step-card">
+              <div class="step-num-pill">कदम 1</div>
+              <h4 class="step-title" id="step1Title">दस्तावेज़ तैयार करें</h4>
+              <p class="step-desc" id="step1Desc">विवरण...</p>
+            </div>
+            <!-- Step 2 -->
+            <div class="step-card">
+              <div class="step-num-pill">कदम 2</div>
+              <h4 class="step-title" id="step2Title">पोर्टल पर रजिस्टर करें</h4>
+              <p class="step-desc" id="step2Desc">विवरण...</p>
+            </div>
+            <!-- Step 3 -->
+            <div class="step-card">
+              <div class="step-num-pill">कदम 3</div>
+              <h4 class="step-title" id="step3Title">आवेदन सबमिट करें</h4>
+              <p class="step-desc" id="step3Desc">विवरण...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Requirements & Documents Checklist -->
+        <div class="details-split-grid">
+          <!-- Required Documents -->
+          <div class="checklist-panel">
+            <h4 class="panel-title">
+              <span class="panel-icon">📄</span> जरूरी दस्तावेज़ (Required Documents)
+            </h4>
+            <ul id="documentsList" class="checklist-items">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+
+          <!-- Eligibility Criteria -->
+          <div class="checklist-panel">
+            <h4 class="panel-title">
+              <span class="panel-icon">✅</span> पात्रता मानदंड (Eligibility Criteria)
+            </h4>
+            <ul id="eligibilityList" class="checklist-items">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- Official Links and Helpline Action Bar -->
+        <div class="card-footer-actions">
+          <div class="helpline-group">
+            <span class="helpline-icon">📞</span>
+            <div class="helpline-meta">
+              <span class="helpline-label">आधिकारिक टोल-फ्री हेल्पलाइन:</span>
+              <strong id="helplineNumber" class="helpline-val">155261</strong>
+            </div>
+          </div>
+          <div class="portal-cta-group">
+            <a id="officialPortalLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary portal-btn">
+              <span>आधिकारिक पोर्टल पर जाएं (Visit Portal)</span>
+              <span class="link-arrow">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alternative Related Schemes -->
+      <div id="alternativesSection" class="alternatives-section">
+        <h4 class="alternatives-title">💡 अन्य संबंधित योजनाएं (Related Schemes):</h4>
+        <div id="alternativesGrid" class="alternatives-grid">
+          <!-- Dynamic alternative cards -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal for All Schemes Explorer -->
+    <div id="schemesModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <h3 class="modal-title">🇮🇳 सभी सरकारी योजनाएं (All Welfare Schemes)</h3>
+            <p class="modal-subtitle">श्रेणी के अनुसार योजना चुनें और उसकी विस्तृत जानकारी देखें</p>
+          </div>
+          <button id="closeModalBtn" class="modal-close-btn" aria-label="बंद करें">✕</button>
+        </div>
+
+        <div class="category-filter-bar" id="categoryFilterBar">
+          <!-- Dynamic category chips -->
+        </div>
+
+        <div class="modal-body">
+          <div id="allSchemesList" class="all-schemes-grid">
+            <!-- Dynamic scheme catalog items -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Civic Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <strong>VaaniAccess</strong> — AI & Voice Civic Inclusion Navigator for Bharat
+      </div>
+      <div class="footer-right">
+        <span>Catalyst Hackathon MVP</span> • 
+        <span>Voice-First Architecture</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
