@@ -5,7 +5,7 @@
 
 ![VaaniAccess Banner](static/assets/vaaniaccess_banner.jpg)
 
-**Empowering every citizen to effortlessly discover, understand, and access government welfare schemes using everyday spoken Hindi.**
+**Empowering every citizen to effortlessly discover,, understand, and access government welfare schemes using everyday spoken Hindi.**
 
 [![Hackathon](https://img.shields.io/badge/Hackathon-Career%20Catalyst%20Club%20%C3%97%20GeeksforGeeks-green?style=for-the-badge)](https://www.geeksforgeeks.org/)
 [![Track](https://img.shields.io/badge/Problem%20Statement-%5BCC--GFG--06%5D%20Voice%20AI%20%26%20Accessibility-blue?style=for-the-badge)](https://github.com/shrijanshukla39/catalystHack-project)
