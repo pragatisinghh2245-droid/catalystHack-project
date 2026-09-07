@@ -214,7 +214,7 @@ Built with ❤️ for the **Career Catalyst Club × GeeksforGeeks 4-Hour Softwar
 | Contributor | Role | GitHub |
 | :--- | :--- | :--- |
 | **Shrijan Shukla** | Project Architecture, Research & Documentation | [@shrijanshukla39](https://github.com/shrijanshukla39) |
-| **Narendra Mishra** | Voice AI, FastAPI Engine & Full-Stack Implementation | [@narendramishra4556](https://github.com/narendramishra4556) |
+| **Pragati Singh** | Voice AI, FastAPI Engine & Full-Stack Implementation | [@pragatisinghh2245-droid](https://github.com/pragatisinghh2245-droid) |
 
 ---
 
